@@ -9,6 +9,5 @@ def main_menu_keyboard(inline=False):
     else:
         keyboard = [
             [KeyboardButton("Новости"), KeyboardButton("Помощь")],
-            [KeyboardButton("Контакты"), KeyboardButton("Настройки")]
         ]
         return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
