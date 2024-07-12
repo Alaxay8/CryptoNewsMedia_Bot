@@ -32,16 +32,17 @@ async def get_crypto_news():
 async def send_news(message: Message) -> None:
     news_data = await get_crypto_news()
     if news_data and news_data['status'] == 'ok' and news_data['articles']:
-        for article in news_data['articles'][:5]:
+        translator = GoogleTranslator(source='en', target='ru')
+        for article in news_data['articles'][:1]:  # Отправляем только одну самую свежую новость
             title = article['title']
             description = article.get('description', 'No description available')
             url = article['url']
 
+            # Переводим заголовок и описание на русский
+            title_ru = translator.translate(title)
+            description_ru = translator.translate(description)
 
-            title_ru = GoogleTranslator(source='en', target='ru').translate(title)
-            description_ru = GoogleTranslator(source='en', target='ru').translate(description)
-
-            msg = f"⚡️ Молния ⚡️\nTitle: {title}\nDescription: {description}\nURL: {url}\n\n🔹 Перевод 🔹\nЗаголовок: {title_ru}\nОписание: {description_ru}"
+            msg = f"⚡️ Молния ⚡️\n\nЗаголовок: {title_ru}\n\nОписание: {description_ru}\n\nСсылка: {url}"
             await send_text_message(message, msg)
     else:
-        await send_text_message(message, "Failed to get news.")
+        await send_text_message(message, "Не удалось получить новости.")

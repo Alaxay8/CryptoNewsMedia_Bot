@@ -1,13 +1,7 @@
-from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
-def main_menu_keyboard(inline=False):
-    if inline:
-        keyboard = [
-            [InlineKeyboardButton("Новости", callback_data='news')],
-        ]
-        return InlineKeyboardMarkup(keyboard)
-    else:
-        keyboard = [
-            [KeyboardButton("Новости"), KeyboardButton("Помощь")],
-        ]
-        return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+def subscribe_keyboard():
+    keyboard = [
+        [InlineKeyboardButton("Подписаться на новости", callback_data='subscribe')]
+    ]
+    return InlineKeyboardMarkup(keyboard)
