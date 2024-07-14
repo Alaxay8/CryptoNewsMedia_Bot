@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
-def subscribe_keyboard():
+def get_keyboard():
     keyboard = [
-        [InlineKeyboardButton("Подписаться на новости", callback_data='subscribe')]
+        [InlineKeyboardButton(text="Подписаться на новости", callback_data='subscribe')]
     ]
     return InlineKeyboardMarkup(keyboard)

@@ -1,21 +1,23 @@
 from telegram import Update
-from telegram.ext import ContextTypes
-from .keyboards import subscribe_keyboard
-from .news import send_news
+from telegram.ext import CallbackContext
+from bot.keyboards import get_keyboard
 
+subscribed_users = set()
+sent_articles = set()  # Набор для отслеживания отправленных новостей
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text(
-        "Привет! Нажмите кнопку ниже, чтобы подписаться на новости:",
-        reply_markup=subscribe_keyboard()
+        text="Добро пожаловать! Нажмите на кнопку ниже, чтобы подписаться на новости.",
+        reply_markup=get_keyboard()
     )
 
-
-async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
-    await query.edit_message_text(
-        text="Вы подписались на новости. Вы будете получать новости сразу после их публикации.")
+    user_id = query.from_user.id
 
-    # Отправляем новости сразу после подписки
-    await send_news(query.message)
+    if query.data == 'subscribe':
+        subscribed_users.add(user_id)
+        await query.edit_message_text(text="Вы подписались на новости!")
+    else:
+        await query.edit_message_text(text="Неизвестная команда.")
