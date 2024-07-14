@@ -1,12 +1,15 @@
-import requests
-import os
+import logging
 
-NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+import aiohttp
+import requests
+from config.settings import NEWS_API_KEY
+
+logger = logging.getLogger(__name__)
 
 async def fetch_crypto_news():
-    url = f"https://newsapi.org/v2/everything?q=cryptocurrency&language=ru&sortBy=publishedAt&apiKey=edc762423eb3488a981e88167b207a43"
-    response = requests.get(url)
-    response.raise_for_status()
-    news_data = response.json()
-    articles = news_data.get('articles', [])
-    return articles
+    url = f"https://newsapi.org/v2/everything?q=cryptocurrency&language=en&sortBy=publishedAt&apiKey={NEWS_API_KEY}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            response.raise_for_status()
+            data = await response.json()
+            return data['articles']
